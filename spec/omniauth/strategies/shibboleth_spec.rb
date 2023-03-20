@@ -1,5 +1,6 @@
 #require 'pry-byebug'
 require 'spec_helper'
+require 'rack/session'
 
 def make_env(path = '/auth/shibboleth', props = {})
   {
@@ -11,31 +12,27 @@ def make_env(path = '/auth/shibboleth', props = {})
 end
 
 def without_session_failure_path
-  if OmniAuth::VERSION >= "1.0" && OmniAuth::VERSION < "1.1"
-    "/auth/failure?message=no_shibboleth_session"
-  elsif OmniAuth::VERSION >= "1.1"
-    "/auth/failure?message=no_shibboleth_session&strategy=shibboleth"
-  end
+  "/auth/failure?message=no_shibboleth_session&strategy=shibboleth"
 end
 
 def empty_uid_failure_path
-  if OmniAuth::VERSION >= "1.0" && OmniAuth::VERSION < "1.1"
-    "/auth/failure?message=empty_uid"
-  elsif OmniAuth::VERSION >= "1.1"
-    "/auth/failure?message=empty_uid&strategy=shibboleth"
-  end
+  "/auth/failure?message=empty_uid&strategy=shibboleth"
 end
 
 describe OmniAuth::Strategies::Shibboleth do
   let(:app){ Rack::Builder.new do |b|
-    b.use Rack::Session::Cookie, {:secret => "abc123"}
+    b.use Rack::Session::Cookie, {:secret => SecureRandom.hex(64) }
     b.use OmniAuth::Strategies::Shibboleth
     b.run lambda{|env| [200, {}, ['Not Found']]}
   end.to_app }
 
+  before do
+    OmniAuth.config.request_validation_phase = ->(_env) { true }
+  end
+
   context 'request phase' do
     before do
-      get '/auth/shibboleth'
+      post '/auth/shibboleth'
     end
 
     it 'is expected to redirect to callback_url' do

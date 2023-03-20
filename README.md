@@ -1,11 +1,8 @@
 # OmniAuth Shibboleth strategy
 
-[![Gem Version](http://img.shields.io/gem/v/omniauth-shibboleth.svg)](http://rubygems.org/gems/omniauth-shibboleth)
-[![Build Status](https://travis-ci.org/toyokazu/omniauth-shibboleth.svg?branch=master)](https://travis-ci.org/toyokazu/omniauth-shibboleth)
-
 OmniAuth Shibboleth strategy is an OmniAuth strategy for authenticating through Shibboleth (SAML). If you do not know OmniAuth, please visit OmniAuth wiki.
 
-https://github.com/intridea/omniauth/wiki
+https://github.com/omniauth/omniauth/wiki
 
 The detail of the authentication middleware Shibboleth is introduced in Shibboleth wiki.
 
@@ -15,18 +12,11 @@ OmniAuth basically works as a middleware of Rack applications. It provides envir
 
 OmniAuth Shibboleth strategy uses the 'auth hash' for providing user attributes passed by Shibboleth SP. It enables developers to use Shibboleth and the other authentication methods, including local auth, together in one application.
 
-Currently, this document is written for Rails applications. If you tried the other environments and it requires some difficulities, please let me know in the Issues page.
-
-https://github.com/toyokazu/omniauth-shibboleth/issues
-
 ## Getting Started
 
-### Setup Gemfile and Install
+### Install
 
-    % cd rails-app
-    % vi Gemfile
-    gem 'omniauth-shibboleth'
-    % bundle install
+    gem 'omniauth-shibboleth-redux', require: 'omniauth-shibboleth'
 
 ### Setup Shibboleth Strategy
 
@@ -52,7 +42,7 @@ To use OmniAuth Shibboleth strategy as a middleware in your rails application, a
 
 In the above example, 'unscoped-affiliation' and 'entitlement' attributes are additionally provided in the raw_info field. They can be referred like request.env["omniauth.auth"]["extra"]["raw_info"]["unscoped-affiliation"]. The detail of the omniauth auth hash schema is described in the following page.
 
-https://github.com/intridea/omniauth/wiki/Auth-Hash-Schema
+https://github.com/omniauth/omniauth/wiki/Auth-Hash-Schema
 
 'eppn' attribute is used as uid field. 'displayName' attribute is provided as request.env["omniauth.auth"]["info"]["name"].
 
@@ -124,7 +114,7 @@ Example shibd.conf:
 
 Shibboleth strategy just checks the existence of Shib-Session-ID or Shib-Application-ID.
 
-If you want to use omniauth-shibboleth without Apache or IIS, you can try **rack-saml**. It supports a part of Shibboleth SP functions.
+If you want to use omniauth-shibboleth-redux without Apache or IIS, you can try **rack-saml**. It supports a part of Shibboleth SP functions.
 
 https://github.com/toyokazu/rack-saml
 
@@ -211,7 +201,7 @@ If you need the first attribute in alphabetical order, you can specify lambda fu
 
 ## License (MIT License)
 
-omniauth-shibboleth is released under the MIT license.
+omniauth-shibboleth-redux is released under the MIT license.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
